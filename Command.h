@@ -17,20 +17,84 @@
 class CommandGroup;
 class Subsystem;
 
-struct SubsystemSetItem {
-	Subsystem *m_system;
-	SubsystemSetItem *next;
+template<typename T> class AVector {
+private:
+	typedef struct sItem {
+		T *payload;
+		sItem *next;
+	} Item;
+	Item *root;
+	Item *last;
+public:
+	class iterator {
+		Item *m_item;
+	public:
+		iterator(Item *item) {m_item = item;};
+		iterator &operator++() {m_item=m_item->next; return *this;};
+		T &operator*() { return *(m_item->payload); };
+	};
+	AVector() { root=NULL; last=NULL; };
+	~AVector() { clear(); };
+	void clear() {
+		Item *p = root;
+		while(p) {
+			Item *t = p;
+			p = p->next;
+			delete t;
+		}
+	};
+	iterator begin() { return iterator(root); };
+	iterator end() { return iterator(NULL); };
+	int size() const {int size=0; for(Item *p = root; p; p = p->next) size++; return size; };
+	void insert(const T& val) {
+		Item *newItem = new Item;
+		newItem->payload = val;
+		newItem->next = root;
+		root = newItem;
+		if(last==NULL) last = newItem;
+	};
+	void push_back (const T& val) {
+		if(last==NULL) {
+			insert(val);
+		}
+		else {
+			Item *newItem = new Item;
+			newItem->payload = val;
+			newItem->next = NULL;
+			last->next = newItem;
+			last = newItem;
+		}
+	};
+	int count(const T& val) {
+		int total = 0;
+		for(Item *p = root; p; p = p->next) {
+			if(p->payload == val) total++;
+		}
+		return total;
+	};
+	iterator find (const T& val) const {
+		for(Item *p = root; p; p = p->next) {
+			if(p->payload == val) return iterator(p);
+		}
+		return iterator(NULL);
+	};
+	int erase (const T& val) {
+		int total = 0;
+		Item *p = root;
+		while(p) {
+			Item *t = p;
+			Item **s = &p;
+			p = p->next;
+			if(t->payload == val) {
+				*s = t->next;
+				delete t;
+				total++;
+			}
+		}
+		return total;
+	}
 };
 
-class SubsystemSet {
-private:
-	SubsystemSetItem *root;
-public:
-	SubsystemSet();
-	~SubsystemSet();
-	void insert(Subsystem *pSystem);
-	int count(Subsystem *pSystem);
-};
 
 class Command
 {
@@ -52,7 +116,7 @@ public:
         bool IsInterruptible();
         void SetInterruptible(bool interruptible);
         bool DoesRequire(Subsystem *subsystem);
-        /* typedef std::set<Subsystem *> SubsystemSet; */
+        typedef AVector<Subsystem *> SubsystemSet;
         SubsystemSet GetRequirements();
         CommandGroup *GetGroup();
         int GetID();

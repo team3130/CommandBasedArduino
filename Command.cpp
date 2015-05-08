@@ -16,39 +16,6 @@
 
 #include <Command.h>
 
-SubsystemSet::SubsystemSet()
-{
-	root = 0;
-}
-
-SubsystemSet::~SubsystemSet()
-{
-	SubsystemSetItem *p = root;
-	while(p) {
-		SubsystemSetItem *t = p;
-		p = p->next;
-		delete t;
-	}
-}
-
-void SubsystemSet::insert(Subsystem *pSystem)
-{
-	SubsystemSetItem *newItem = new SubsystemSetItem;
-	newItem->m_system = pSystem;
-	newItem->next = root;
-	root = newItem;
-}
-
-int SubsystemSet::count(Subsystem *pSystem)
-{
-	int total = 0;
-	for(SubsystemSetItem *p = root; p; p = p->next) {
-		if(p->m_system == pSystem) total++;
-	}
-	return total;
-}
-
-
 int Command::m_commandCounter = 0;
 
 void Command::InitCommand(const char *name, double timeout)
@@ -105,10 +72,7 @@ Command::Command(const char *name, double timeout)
 }
 
 Command::~Command()
-{//TODO deal with cleaning up all listeners
-	/*if (m_table != NULL){
-		m_table->RemoveChangeListener(kRunning, this);
-	}*/
+{
 }
 
 /**
@@ -262,7 +226,7 @@ bool Command::IsTimedOut()
  * Returns the requirements (as an std::set of {@link Subsystem Subsystems} pointers) of this command
  * @return the requirements (as an std::set of {@link Subsystem Subsystems} pointers) of this command
  */
-SubsystemSet Command::GetRequirements()
+Command::SubsystemSet Command::GetRequirements()
 {
 	return m_requirements;
 }
