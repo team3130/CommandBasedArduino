@@ -15,6 +15,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include <Command.h>
+#include <Scheduler.h>
 
 int Command::m_commandCounter = 0;
 
@@ -385,7 +386,7 @@ String Command::GetName()
 {
 	if (m_name.length() == 0)
 	{
-		m_name = String("Command_") + String(typeid(*this).name());
+		m_name = String("Command_") + String((void*)this);
 	}
 	return m_name;
 }

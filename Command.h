@@ -48,7 +48,7 @@ public:
 	int size() const {int size=0; for(Item *p = root; p; p = p->next) size++; return size; };
 	void insert(const T& val) {
 		Item *newItem = new Item;
-		newItem->payload = val;
+		newItem->payload = &val;
 		newItem->next = root;
 		root = newItem;
 		if(last==NULL) last = newItem;
@@ -59,7 +59,7 @@ public:
 		}
 		else {
 			Item *newItem = new Item;
-			newItem->payload = val;
+			newItem->payload = &val;
 			newItem->next = NULL;
 			last->next = newItem;
 			last = newItem;
@@ -68,13 +68,13 @@ public:
 	int count(const T& val) {
 		int total = 0;
 		for(Item *p = root; p; p = p->next) {
-			if(p->payload == val) total++;
+			if(*(p->payload) == val) total++;
 		}
 		return total;
 	};
 	iterator find (const T& val) const {
 		for(Item *p = root; p; p = p->next) {
-			if(p->payload == val) return iterator(p);
+			if(*(p->payload) == val) return iterator(p);
 		}
 		return iterator(NULL);
 	};
@@ -85,7 +85,7 @@ public:
 			Item *t = p;
 			Item **s = &p;
 			p = p->next;
-			if(t->payload == val) {
+			if(*(t->payload) == val) {
 				*s = t->next;
 				delete t;
 				total++;
