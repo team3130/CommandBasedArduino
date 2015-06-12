@@ -20,7 +20,7 @@ class Subsystem;
 template<typename T> class AVector {
 private:
 	typedef struct sItem {
-		T *payload;
+		T const *payload;
 		sItem *next;
 	} Item;
 	Item *root;
@@ -29,9 +29,16 @@ public:
 	class iterator {
 		Item *m_item;
 	public:
-		iterator(Item *item) {m_item = item;};
+		iterator(Item *item=NULL) {m_item = item;};
 		iterator &operator++() {m_item=m_item->next; return *this;};
-		T &operator*() { return *(m_item->payload); };
+		iterator operator++(int) {
+		        iterator tmp(*this); // copy
+		        operator++(); // pre-increment
+		        return tmp;   // return old value
+		    };
+		const T &operator*() { return *(m_item->payload); };
+		bool operator==(const iterator& other){return this->m_item == other.m_item;}
+		bool operator!=(const iterator& other){return !(*this == other);}
 	};
 	AVector() { root=NULL; last=NULL; };
 	~AVector() { clear(); };

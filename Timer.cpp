@@ -147,12 +147,3 @@ double Timer::GetFPGATimestamp()
 	// Call the helper GetFPGATime() in Utility.cpp
 	return millis() * 1.0e-3;
 }
-
-// Internal function that reads the PPC timestamp counter.
-extern "C"
-{
-	uint32_t niTimestamp32(void);
-	uint64_t niTimestamp64(void);
-}
-
-

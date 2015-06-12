@@ -25,7 +25,7 @@ class Timer
 {
 public:
 	// For Arduino we use millis() which returns milliseconds.
-	static constexpr double kRolloverTime = 1.0e-3 * (unsigned long)(-1);
+	static const double kRolloverTime = 1.0e-3 * (unsigned long)(-1);
 	Timer();
 	virtual ~Timer();
 	double Get();
@@ -35,7 +35,6 @@ public:
 	bool HasPeriodPassed(double period);
 
 	static double GetFPGATimestamp();
-	static double GetPPCTimestamp();
 
 private:
 	double m_startTime;
