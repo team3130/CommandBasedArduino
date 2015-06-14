@@ -11,7 +11,6 @@
 /* must be accompanied by the FIRST BSD license file in $(WIND_BASE)/WPILib.  */
 /*----------------------------------------------------------------------------*/
 
-#include <Arduino.h>
 #include "FIRSTTimer.h"
 
 /**
