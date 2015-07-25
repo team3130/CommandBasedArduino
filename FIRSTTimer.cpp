@@ -12,6 +12,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include "FIRSTTimer.h"
+#include <Arduino.h>
 
 /**
  * Create a new timer object.

@@ -14,9 +14,6 @@
 /* must be accompanied by the FIRST BSD license file in $(WIND_BASE)/WPILib.  */
 /*----------------------------------------------------------------------------*/
 
-#include <Arduino.h>
-
-
 /**
  * Timer objects measure accumulated time in seconds.
  * The timer object functions like a stopwatch. It can be started, stopped, and cleared. When the
